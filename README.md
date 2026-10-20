@@ -2,6 +2,8 @@
 
 # Apple Corners
 
+**简体中文** · [English](README.en.md)
+
 ### 苹果风格圆角，保留你原来的设计。
 
 一个轻量的 **Codex Skill**，用 G3 连续曲线替换现有圆角。<br>
