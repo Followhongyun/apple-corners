@@ -1,0 +1,4 @@
+interface:
+  display_name: "苹果风格 G3 圆角"
+  short_description: "跨平台苹果风格 G3；支持全站批量替换，只改圆角并保留现有参数与设计"
+  default_prompt: "使用 $apple-corners 为指定组件实现跨平台苹果风格圆角，先保证 G3，再贴近 Apple 观感；只根据现有参数替换圆角，不改变卡片设计；要求全局时批量扫描、替换并报告未支持项。"
