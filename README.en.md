@@ -15,15 +15,15 @@ From a single card to an entire website: keep your dimensions, radius parameters
 
 </div>
 
-![Apple Corners preview: cards, buttons, an input, and pill tags with borders and shadows](assets/preview.png)
+![Apple Corners preview: cards, buttons, an input, and pill tags with borders and shadows](assets/preview.en.png)
 
 <p align="center"><sub>A page migration example: native CSS corners → G3 contours and adapted shadows. The visual change is usually subtle; the page is not redesigned to exaggerate it.</sub></p>
 
 ## See the difference
 
-![An animated comparison of native CSS corners and Apple-inspired G3 corners, showing the same card's top-left corner at 8× magnification](assets/corners-comparison.gif)
+![An animated comparison of native CSS corners and Apple-inspired G3 corners, showing the same card's top-left corner at 8× magnification](assets/corners-comparison.en.gif)
 
-<p align="center"><sub>The animation switches every 1.8 seconds. Both states use the same 24 px radius, dimensions, border, and shadow parameters. Frame 01 uses native browser CSS; frame 02 uses this skill's G3 contour and shadow adaptation. Only the corner paint layers are shown, with the G3 fill and border rasterized again at the enlarged scale. Image labels are in Chinese.</sub></p>
+<p align="center"><sub>The animation switches every 1.8 seconds. Both states use the same 24 px radius, dimensions, border, and shadow parameters. Frame 01 uses native browser CSS; frame 02 uses this skill's G3 contour and shadow adaptation. Only the corner paint layers are shown, with the G3 fill and border rasterized again at the enlarged scale.</sub></p>
 
 ## What it does
 
