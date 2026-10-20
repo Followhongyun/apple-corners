@@ -1,39 +1,39 @@
-# 几何与接入
+# Geometry and integration
 
 ## API
 
-从 `scripts/g3-corners.mjs` 导入：
+Import from `scripts/g3-corners.mjs`:
 
-- `geometry(width, height, radius)`：返回使用半径、kind、控制点和 G3 标记。radius 可为数值、px/% 简写（含 `/`）、或 `{tl,tr,br,bl}`；各角可用 `[rx,ry]`。
-- `readElementGeometry(element)`：读取未变换 border-box 和计算样式，解析百分比、calc、常规字体单位；不修改目标元素。特殊上下文单位须由框架解析。inline auto 尺寸后备值有整数精度。
-- `maskCanvas(width,height,radius,scale)`：Canvas 遮罩；接入需设置 mask-size 和 mask-repeat。本地文件页面优先使用 data URL，验证遮罩实际加载。
-- `rasterize(...)`：RGBA 像素及几何，不依赖 DOM。
-- `makeField(geometry)`：边界附近的符号距离估计，不是全局精确距离，不能用于大幅精确法向偏置。
+- `geometry(width, height, radius)`: returns used radii, kind, control points, and the G3 flag. The radius can be a number, px/% shorthand (including `/`), or `{tl,tr,br,bl}`; individual corners can use `[rx,ry]`.
+- `readElementGeometry(element)`: reads the untransformed border box and computed styles, resolving percentages, calc expressions, and common font units without modifying the target. Special context-dependent units must be resolved by the framework. The fallback for inline auto dimensions has integer precision.
+- `maskCanvas(width,height,radius,scale)`: a Canvas mask; configure mask-size and mask-repeat when integrating it. Prefer data URLs on local file pages and verify that the mask actually loads.
+- `rasterize(...)`: RGBA pixels and geometry, without a DOM dependency.
+- `makeField(geometry)`: a signed distance estimate near the boundary, not an exact global distance field. Do not use it for large, exact normal offsets.
 
 ```js
 const g = readElementGeometry(element);
 const r = Object.fromEntries(['tl','tr','br','bl'].map((k,i) => [k,g.resolvedRadii[i]]));
 const mask = maskCanvas(g.width,g.height,r,devicePixelRatio);
-// 将 mask 接入项目既有绘制层，不无条件裁剪整个元素。
+// Integrate the mask into existing paint layers; do not unconditionally clip the whole element.
 ```
 
-百分比按宽高分别解析；重叠半径依 CSS 规则统一计算使用值，不写回声明。9999px 胶囊与 50% 椭圆语义不同。零半径保持方角，其他角照常转换。
+Resolve percentages against width and height separately. Normalize overlapping radii uniformly according to CSS rules to obtain used values, without writing them back to source declarations. A 9999px pill and a 50% ellipse have different semantics. Keep zero-radius corners square while converting the other corners normally.
 
-## 连续性
+## Continuity
 
-普通角为七次贝塞尔，控制点结构：
+Standard corners use a degree-7 Bezier curve with this control-point structure:
 
 ```
 (0,0), (a,0), (b,0), (c,0),
 (1,1-c), (1,1-b), (1,1-a), (1,1)
 ```
 
-前四点与后四点分别共切线，使端点一至三阶导数共线，κ=0、dκ/ds=0，与直线匹配。参数满足 0<a<b<c<1，相邻控制点差的坐标和为正，保证正则性。紧凑空间在两套参数间插值，保持上述性质；椭圆角对连续曲线进行正的分轴缩放后重新栅格化。
+The first four and last four points each lie on their respective tangent line. Endpoint derivatives of orders one through three are therefore collinear, with κ=0 and dκ/ds=0, matching a straight edge. Parameters satisfy 0<a<b<c<1; the sum of coordinate increments between adjacent control points is positive, ensuring regularity. Tight spaces interpolate between two parameter sets while preserving these properties. Elliptical corners apply positive per-axis scaling to the continuous curve and are then rasterized again.
 
-胶囊使用单段八次端帽，端点前三阶导数共线，入口速度非零；内部 y′=280t³(1−t)³>0，保证正则性，中部没有额外拼接。完整圆/椭圆采用解析轮廓。系数与分支以源码为准。
+Pills use single-segment degree-8 end caps. Their first three endpoint derivatives are collinear and entry velocity is nonzero; internally, y′=280t³(1−t)³>0 ensures regularity, with no extra join in the middle. Complete circles and ellipses use analytic contours. The source code is authoritative for coefficients and branches.
 
-栅格器直接求规范曲线，不转换为三次路径。描边应按同一边界的距离/覆盖率构造；简单缩小形状不是精确等距内描边。数值和像素均有有限精度。
+The rasterizer evaluates the canonical curve directly, without conversion to cubic paths. Construct strokes from distance or coverage relative to the same boundary; simply shrinking the shape does not produce an exact equidistant inner stroke. Numerical evaluation and pixels both have finite precision.
 
-## 动态与原生平台
+## Dynamic updates and native platforms
 
-ResizeObserver 只检测尺寸；主题、半径状态、字体和 DPR 变化也要重读。缓存键包含宽高、四角使用值、DPR、算法版本。原生平台可使用同尺寸 RGBA/PNG 遮罩，或移植全部几何分支与求值方法；不要只移植普通角。
+ResizeObserver detects dimensions only; reread geometry when themes, radius states, fonts, or DPR change as well. Cache keys include width, height, the four corners' used radii, DPR, and algorithm version. Native platforms can use same-size RGBA/PNG masks or port all geometry branches and evaluation methods, not just standard corners.

@@ -1,34 +1,34 @@
 ---
 name: apple-corners
-description: 为网页或应用添加苹果风格 G3 圆角，支持单个组件及全站批量替换，保留现有尺寸、圆角参数和设计。
+description: Add Apple-inspired G3 corners to websites or apps, for individual components or project-wide migrations, while preserving existing dimensions, radius parameters, and design.
 ---
 
 # Apple Corners
 
-用自定义 G3 曲线实现苹果风格圆角：先保证几何连续性，再贴近 Apple 观感。不是 Apple 原生算法，不承诺逐像素一致。
+Use custom G3 curves for Apple-inspired corners: prioritize geometric continuity, then visual similarity. This is not Apple's native algorithm and does not promise pixel-for-pixel equivalence.
 
-## 只改圆角
+## Change corners only
 
-读取现有尺寸、四角半径、单位和设计 token，保留内容、布局、字体、颜色、边框参数、阴影参数与交互。只调整轮廓及必要的绘制层；不为容纳曲线改卡片尺寸或半径。保持原有 overflow 行为，不裁剪弹层和焦点环。
+Read existing dimensions, per-corner radii, units, and design tokens. Preserve content, layout, typography, colors, border parameters, shadow parameters, and interactions. Adjust only contours and necessary paint layers; do not resize cards or change radius values to accommodate a curve. Preserve existing overflow behavior, popovers, and focus rings.
 
-## 使用
+## Workflow
 
-1. 定位目标组件及其圆角来源。用户要求全站/全应用时，扫描共用组件、样式和主题入口并批量适配；普通请求只改指定范围。
-2. 复制 [g3-corners.mjs](scripts/g3-corners.mjs) 到项目。用 `geometry` 生成几何，`maskCanvas` 生成浏览器遮罩，或 `rasterize` 生成跨平台 RGBA。API 与特殊形状见 [实现说明](references/implementation.md)。
-3. 背景、描边与原本需要裁剪的内容使用同一轮廓。不要把普通 CSS 边框留在 G3 背景上，也不要让 G3 绘制再次经过普通圆角裁剪。原生 CSS 阴影需要适配时读取 [阴影说明](references/shadows.md)。
-4. 在尺寸、半径、状态或设备像素比例变化时重新计算并缓存；清理观察器。不拉伸旧遮罩，不逐帧编码大 PNG。
-5. 检查实际页面的布局、内容、边框、阴影及交互。已有网站须以真正的原生 CSS 截图作为基线。报告覆盖范围和确实无法适配的对象，不能用新造的卡片代替迁移验证。
+1. Locate the target components and their radius sources. For a site-wide or app-wide request, scan shared components, styles, and theme entry points and adapt them in batches. Otherwise, stay within the requested scope.
+2. Copy [g3-corners.mjs](scripts/g3-corners.mjs) into the project. Use `geometry` for geometry, `maskCanvas` for browser masks, or `rasterize` for cross-platform RGBA. See [implementation notes](references/implementation.md) for APIs and special shapes.
+3. Use the same contour for backgrounds, strokes, and content that already needs clipping. Do not leave an ordinary CSS border around a G3 background or clip G3 painting through an ordinary rounded corner. Read [shadow adaptation](references/shadows.md) when adapting native CSS shadows.
+4. Recompute and cache when dimensions, radii, state, or device pixel ratio change; clean up observers. Do not stretch old masks or encode large PNGs on every animation frame.
+5. Check layout, content, borders, shadows, and interactions on the actual page. Existing websites require a genuine native CSS screenshot baseline. Report coverage and components that cannot be adapted faithfully; newly created sample cards are not migration validation.
 
-胶囊、大圆角、百分比、椭圆和不对称角由生成器适配，不直接跳过。零半径保持尖角；含尖角的整个轮廓不声称 G3。G3 指连续几何，不指离散像素；不能转成普通三次贝塞尔或折线后继续承诺严格 G3。
+Use the generator's adaptations for pills, large radii, percentages, ellipses, and asymmetric corners rather than skipping them. Keep zero-radius corners sharp; do not claim that a contour containing sharp corners is G3 throughout. G3 describes continuous geometry, not discrete pixels. Do not convert it to ordinary cubic Bezier curves or polylines and continue to promise strict G3.
 
-用户明确要求 Apple 原生时，使用目标平台的 continuous API，并标明这是原生方案，不承诺 G3。
+When the user explicitly requests native Apple rendering, use the target platform's continuous API and identify it as the native approach without promising G3.
 
-## 验证与导出
+## Validate and export
 
 ```sh
 node scripts/test-g3.mjs
-node scripts/test-shadow-delta.mjs # 使用阴影适配时
+node scripts/test-shadow-delta.mjs # When using shadow adaptation
 node scripts/export-g3.mjs 280 210 40 2 corner.png
 ```
 
-脚本无第三方运行依赖。应用原生绘图或 GPU 移植需在目标平台另行验证；本 skill 不包含所有框架的 UI 封装。
+The scripts have no third-party runtime dependencies. Native drawing or GPU ports require separate validation on the target platform; this skill does not include UI wrappers for every framework.

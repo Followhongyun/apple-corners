@@ -11,7 +11,7 @@ From a single card to an entire website: keep your dimensions, radius parameters
 
 **G3 geometry** · **No third-party runtime dependencies** · **Optional shadow adaptation**
 
-[Quick start](#quick-start) · [Usage](#usage) · [Supported shapes](#supported-shapes) · [Implementation notes (Chinese)](references/implementation.md)
+[Quick start](#quick-start) · [Usage](#usage) · [Supported shapes](#supported-shapes) · [Implementation notes](references/implementation.md)
 
 </div>
 
@@ -99,9 +99,9 @@ node scripts/export-g3.mjs 280 210 40 2 corner.png
 
 | File | Purpose |
 | :--- | :--- |
-| [SKILL.md](SKILL.md) | Instructions for Codex (Chinese) |
-| [Implementation notes](references/implementation.md) | APIs, special shapes, and continuity (Chinese) |
-| [Shadow adaptation](references/shadows.md) | Differential correction and validation for native CSS shadows (Chinese) |
+| [SKILL.md](SKILL.md) | Instructions for Codex |
+| [Implementation notes](references/implementation.md) | APIs, special shapes, and continuity |
+| [Shadow adaptation](references/shadows.md) | Differential correction and validation for native CSS shadows |
 | [Corner core](scripts/g3-corners.mjs) | Geometry and rasterization |
 | [Shadow core](scripts/shadow-delta.mjs) | Shadow correction calculations |
 

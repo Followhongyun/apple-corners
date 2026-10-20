@@ -11,7 +11,7 @@
 
 **G3 连续几何** · **零第三方运行依赖** · **按需阴影适配**
 
-[快速安装](#快速安装) · [使用方式](#使用方式) · [支持范围](#支持范围) · [实现说明](references/implementation.md)
+[快速安装](#快速安装) · [使用方式](#使用方式) · [支持范围](#支持范围) · [实现说明（英文）](references/implementation.md)
 
 </div>
 
@@ -99,9 +99,9 @@ node scripts/export-g3.mjs 280 210 40 2 corner.png
 
 | 文件 | 用途 |
 | :--- | :--- |
-| [SKILL.md](SKILL.md) | Codex 使用入口 |
-| [实现说明](references/implementation.md) | API、特殊形状与连续性 |
-| [阴影适配](references/shadows.md) | 原生 CSS 阴影的差量补偿与验收 |
+| [SKILL.md](SKILL.md) | Codex 使用入口（英文） |
+| [实现说明（英文）](references/implementation.md) | API、特殊形状与连续性 |
+| [阴影适配（英文）](references/shadows.md) | 原生 CSS 阴影的差量补偿与验收 |
 | [圆角核心](scripts/g3-corners.mjs) | 几何与栅格化 |
 | [阴影核心](scripts/shadow-delta.mjs) | 阴影补偿计算 |
 
